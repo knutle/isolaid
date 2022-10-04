@@ -4,6 +4,7 @@
 
 namespace Knutle\IsoView\Commands;
 
+use function blank;
 use Closure;
 use Exception;
 use Illuminate\Foundation\Console\ServeCommand;
@@ -12,7 +13,6 @@ use Illuminate\Support\Str;
 use Knutle\IsoView\Commands\Concerns\ProxiesSignalsToChildProcess;
 use Knutle\IsoView\IsoView;
 use const PHP_OS;
-use function shell_exec;
 use const SIGINT;
 use function str_contains;
 use Symfony\Component\Console\Command\Command;
@@ -113,18 +113,31 @@ class IsoViewServeCommand extends ServeCommand implements SignalableCommandInter
             ]);
         }
 
-        return Str::of(shell_exec('ps -ef | grep "[p]hp -S 127.0.0.1:8010"'))->rtrim("\n")->explode("\n")->mapWithKeys(
-            function (string $processLine) {
-                $pid = (string) Str::of($processLine)->match('/^\s*\d+\s*(\d+)\s*/');
+        $listCommand = new Process(['ps', '-ef']);
+        $listCommand->start();
+        $listCommand->wait();
+        $output = $listCommand->getOutput();
+        $lines = Str::of($output)->rtrim("\n")->explode("\n");
+
+        $keys = Str::of($lines->first())->lower()->replaceMatches('/ +/', "\t")->explode("\t");
+
+        return $lines->filter(
+            fn (string $line) => Str::of($line)->is('* 127.0.0.1:8010 *')
+        )->mapWithKeys(
+            function (string $processLine, int $index) use ($keys) {
+                $attributes = Str::of($processLine)->replaceMatches('/ +/', "\t")->explode("\t", $keys->count())->mapWithKeys(
+                    fn (string $line, int $index) => [$keys[$index] => (string) Str::of($line)->replace("\t", ' ')]
+                );
+
+                $pid = $attributes->get('pid');
+                $command = $attributes->get('cmd') ?? '?';
 
                 if (blank($pid)) {
-                    return [null => null];
+                    return ["?:$index" => "Unable to resolve PID from line $processLine"];
                 }
 
-                $command = Str::of(shell_exec("ps -p $pid -o command"))->replaceMatches('/^COMMAND\s+/', '')->rtrim("\n")->explode("\n")->first();
-
                 return [
-                    $pid => "PID $pid ($command)",
+                    $pid => "PID $pid - $command",
                 ];
             }
         )->whereNotNull();
