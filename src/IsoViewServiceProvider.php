@@ -1,14 +1,14 @@
 <?php
 
-namespace Knutle\Isolaid;
+namespace Knutle\IsoView;
 
-use Knutle\Isolaid\Commands\IsolaidLogsCommand;
-use Knutle\Isolaid\Commands\IsolaidServeCommand;
+use Knutle\IsoView\Commands\IsoViewLogsCommand;
+use Knutle\IsoView\Commands\IsoViewServeCommand;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class IsolaidServiceProvider extends PackageServiceProvider
+class IsoViewServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -19,10 +19,10 @@ class IsolaidServiceProvider extends PackageServiceProvider
          */
 
         $package
-            ->name('isolaid')
+            ->name('isoview')
             ->hasConfigFile()
-            ->hasCommand(IsolaidLogsCommand::class)
-            ->hasCommand(IsolaidServeCommand::class)
+            ->hasCommand(IsoViewLogsCommand::class)
+            ->hasCommand(IsoViewServeCommand::class)
             ->hasViews()
             ->hasInstallCommand(
                 fn (InstallCommand $installCommand) => $installCommand->startWith(
@@ -41,7 +41,7 @@ class IsolaidServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         $this->publishes([
-            $this->package->basePath('/../routes/user.php') => Isolaid::getRootPackagePath('routes/isolaid.php'),
+            $this->package->basePath('/../routes/user.php') => IsoView::getRootPackagePath('routes/isoview.php'),
         ], "{$this->package->shortName()}-routes");
     }
 }

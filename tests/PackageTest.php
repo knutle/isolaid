@@ -1,43 +1,43 @@
 <?php
 
-use Knutle\Isolaid\Isolaid;
+use Knutle\IsoView\IsoView;
 use function Pest\Laravel\artisan;
 
 it('can run install command', function () {
-    $publishedRoutesFile = Isolaid::getRootPackagePath('routes/isolaid.php');
+    $publishedRoutesFile = IsoView::getRootPackagePath('routes/isoview.php');
 
     expect($publishedRoutesFile)->not->toBeReadableFile();
 
-    artisan('isolaid:install')
+    artisan('isoview:install')
         ->expectsOutputToContain('Publishing routes...')
-        ->expectsOutputToContain('isolaid has been installed!')
+        ->expectsOutputToContain('isoview has been installed!')
         ->assertSuccessful();
 
     expect($publishedRoutesFile)->toBeReadableFile()
                                 ->and(file_get_contents($publishedRoutesFile))
-                                ->toEqual(file_get_contents(Isolaid::getRootPackagePath('routes/user.php')));
+                                ->toEqual(file_get_contents(IsoView::getRootPackagePath('routes/user.php')));
 
     unlink($publishedRoutesFile);
 });
 
 it('can detect locking process when running serve command then exit lock owner and retry command ', function () {
     expect(
-        trim(callArtisanCommand('isolaid:serve', ['--check-lock' => true]))
+        trim(callArtisanCommand('isoview:serve', ['--check-lock' => true]))
     )->toBeNumeric();
 
-    artisan('isolaid:serve', ['--fast-exit' => true])
+    artisan('isoview:serve', ['--fast-exit' => true])
         ->expectsOutputToContain('Locked by: PID ')
         ->expectsOutputToContain('Listening interface locked by existing process: PID ')
         ->doesntExpectOutputToContain('Server running on [http://127.0.0.1:8010]')
         ->assertFailed();
 
-    getIsolaidTestServerProcess()->stop();
+    getIsoViewTestServerProcess()->stop();
 
     expect(
-        trim(callArtisanCommand('isolaid:serve', ['--check-lock' => true]))
+        trim(callArtisanCommand('isoview:serve', ['--check-lock' => true]))
     )->toEqual('[OK] No locking process found');
 
-    artisan('isolaid:serve', ['--fast-exit' => true])
+    artisan('isoview:serve', ['--fast-exit' => true])
         ->doesntExpectOutputToContain('Locked by: PID ')
         ->doesntExpectOutputToContain('Listening interface locked by existing process: PID ')
         ->expectsOutputToContain('Server running on [http://127.0.0.1:8010]')
@@ -45,8 +45,8 @@ it('can detect locking process when running serve command then exit lock owner a
         ->assertExitCode(143); // Termination (request to terminate)
 
     expect(
-        trim(callArtisanCommand('isolaid:serve', ['--check-lock' => true]))
+        trim(callArtisanCommand('isoview:serve', ['--check-lock' => true]))
     )->toEqual('[OK] No locking process found');
 
-    ensureActiveIsolaidTestServer();
+    ensureActiveIsoViewTestServer();
 });

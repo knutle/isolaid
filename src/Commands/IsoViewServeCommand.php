@@ -2,15 +2,15 @@
 
 /** @noinspection PhpComposerExtensionStubsInspection */
 
-namespace Knutle\Isolaid\Commands;
+namespace Knutle\IsoView\Commands;
 
 use Closure;
 use Exception;
 use Illuminate\Foundation\Console\ServeCommand;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Knutle\Isolaid\Commands\Concerns\ProxiesSignalsToChildProcess;
-use Knutle\Isolaid\Isolaid;
+use Knutle\IsoView\Commands\Concerns\ProxiesSignalsToChildProcess;
+use Knutle\IsoView\IsoView;
 use const PHP_OS;
 use function shell_exec;
 use const SIGINT;
@@ -22,17 +22,17 @@ use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use Throwable;
 
-class IsolaidServeCommand extends ServeCommand implements SignalableCommandInterface
+class IsoViewServeCommand extends ServeCommand implements SignalableCommandInterface
 {
     use ProxiesSignalsToChildProcess;
 
-    protected $name = 'isolaid:serve';
+    protected $name = 'isoview:serve';
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->setProcessTitle('isolaid:serve');
+        $this->setProcessTitle('isoview:serve');
     }
 
     public function handle(): ?int
@@ -41,7 +41,7 @@ class IsolaidServeCommand extends ServeCommand implements SignalableCommandInter
         $this->input->setOption('port', '8010');
         $this->input->setOption('tries', 0);
 
-        Isolaid::bootstrap();
+        IsoView::bootstrap();
 
         try {
             $this->ensureNoLockingProcess();

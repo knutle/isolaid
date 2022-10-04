@@ -1,3 +1,3 @@
 # Changelog
 
-All notable changes to `isolaid` will be documented in this file.
+All notable changes to `isoview` will be documented in this file.

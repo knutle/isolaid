@@ -1,6 +1,6 @@
 <?php
 
-namespace Knutle\Isolaid;
+namespace Knutle\IsoView;
 
 use Composer\InstalledVersions;
 use Illuminate\Config\Repository;
@@ -9,7 +9,7 @@ use Orchestra\Testbench\Concerns\CreatesApplication;
 use Orchestra\Testbench\Concerns\HandlesRoutes;
 use Symfony\Component\Filesystem\Path;
 
-class Isolaid
+class IsoView
 {
     use CreatesApplication;
     use HandlesRoutes;
@@ -25,7 +25,7 @@ class Isolaid
         }
     }
 
-    public static function bootstrap(): Isolaid
+    public static function bootstrap(): IsoView
     {
         $instance = (new static());
 
@@ -42,7 +42,7 @@ class Isolaid
     protected function getPackageProviders($app): array
     {
         return [
-            IsolaidServiceProvider::class,
+            IsoViewServiceProvider::class,
         ];
     }
 

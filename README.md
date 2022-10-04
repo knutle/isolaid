@@ -1,49 +1,43 @@
-# Aids your isolated package testing
+# Preview package views in isolation
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/knutle/isolaid.svg?style=flat-square)](https://packagist.org/packages/knutle/isolaid)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/knutle/isolaid/run-tests?label=tests)](https://github.com/knutle/isolaid/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/knutle/isolaid/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/knutle/isolaid/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/knutle/isolaid.svg?style=flat-square)](https://packagist.org/packages/knutle/isolaid)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/knutle/isoview.svg?style=flat-square)](https://packagist.org/packages/knutle/isoview)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/knutle/isoview/run-tests?label=tests)](https://github.com/knutle/isoview/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/knutle/isoview/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/knutle/isoview/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/knutle/isoview.svg?style=flat-square)](https://packagist.org/packages/knutle/isoview)
 
-This package allows you to define test routes to serve your package views with test data while you are working on them, without requiring a full Laravel install or build step.
+
+This package allows you to quickly and easily preview your package views in isolation during development.  
+You simply define some test routes specifically for testing, then you can view your changes immediately.   
+This works exactly the same as your normal `php artisan serve`, without requiring a full Laravel install or build step.  
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require --dev knutle/isolaid
+composer require --dev knutle/isoview
 ```
 
-You can publish the config file with:
+Then run the install command through the Testbench CLI:
 
 ```bash
-php artisan vendor:publish --tag="isolaid-config"
+testbench isoview:install
 ```
 
-This is the contents of the published config file:
+You should now see a new isoview.php file in ./routes at the root of your package.   
+This is where you will define all your test routes.
 
-```php
-use Illuminate\Support\Facades\Route;
-
-return [
-    'routes' => function () {
-        // put your debug routes here
-        
-        Route::get('/', function () {
-            return view('isolaid::debug', [
-                'today' => now()->format('Y-m-d H:i:s')
-            ]);
-        });
-    }
-];
-```
 
 ## Usage
 
-```shell
-./isolaid serve
+Once you have some routes ready, you can start the server using the Testbench CLI again:
+
+```bash
+testbench isoview:serve
 ```
+
+This will serve your pages from [http://127.0.0.1:8010](http://127.0.0.1:8010).  
+By default, an index page at `/` is provided that provides a list of links for all your available test routes.
 
 ## Testing
 

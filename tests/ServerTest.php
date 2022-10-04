@@ -9,20 +9,20 @@ it('can run server and visit all links from index', function (string $route) {
         Http::get('http://127.0.0.1:8010'.$route)->body()
     );
 })->with(
-    fn () => isolaidGetRequest('/routes.json')->collect()->pluck('uri', 'name')
+    fn () => isoviewGetRequest('/routes.json')->collect()->pluck('uri', 'name')
 );
 
 it('can stop and start server', function () {
     expect(Http::get('http://127.0.0.1:8010')->status())
         ->toEqual(200);
 
-    $process = getIsolaidTestServerProcess();
+    $process = getIsoViewTestServerProcess();
     $process->stop();
 
     expect(fn () => Http::get('http://127.0.0.1:8010')->status())
         ->toThrow(ConnectionException::class);
 
-    ensureActiveIsolaidTestServer();
+    ensureActiveIsoViewTestServer();
 
     expect(Http::get('http://127.0.0.1:8010')->status())
         ->toEqual(200);

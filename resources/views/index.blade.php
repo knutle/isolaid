@@ -1,7 +1,7 @@
 <html lang="en">
     <body>
-        <h1>Isolaid Index</h1>
-        <p>This page lists all routes that are available to preview using Isolaid.</p>
+        <h1>IsoView Index</h1>
+        <p>This page lists all routes that are available to preview using IsoView.</p>
 
         <ul>
             @foreach($routes as ['uri' => $uri, 'name' => $name, 'description' => $description])

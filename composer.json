@@ -1,12 +1,12 @@
 {
-    "name": "knutle/isolaid",
-    "description": "Aids your isolated package testing",
+    "name": "knutle/isoview",
+    "description": "Quickly and easily isolate and test your package views during development",
     "keywords": [
         "knutle",
         "laravel",
-        "isolaid"
+        "isoview"
     ],
-    "homepage": "https://github.com/knutle/isolaid",
+    "homepage": "https://github.com/knutle/isoview",
     "license": "MIT",
     "authors": [
         {
@@ -40,8 +40,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Knutle\\Isolaid\\": "src",
-            "Knutle\\Isolaid\\Tests\\": "tests"
+            "Knutle\\IsoView\\": "src",
+            "Knutle\\IsoView\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -49,6 +49,13 @@
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Knutle\\IsoView\\IsoViewServiceProvider"
+            ]
+        }
     },
     "config": {
         "sort-packages": true,

@@ -5,19 +5,19 @@ use Illuminate\Http\Client\Factory as HttpClientFactory;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
-use Knutle\Isolaid\Isolaid;
-use Knutle\Isolaid\Tests\TestCase;
+use Knutle\IsoView\IsoView;
+use Knutle\IsoView\Tests\TestCase;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 uses(TestCase::class)
     ->beforeAll(function () {
-        Isolaid::bootstrap();
+        IsoView::bootstrap();
 
-        ensureActiveIsolaidTestServer();
+        ensureActiveIsoViewTestServer();
     })
     ->afterAll(function () {
-        $process = getIsolaidTestServerProcess();
+        $process = getIsoViewTestServerProcess();
 
         if ($process->isRunning()) {
             $process->stop();
@@ -44,23 +44,23 @@ function callArtisanCommand(string $command, array $parameters = []): string
     return $output;
 }
 
-function isolaidGetRequest(string $route): Response
+function isoviewGetRequest(string $route): Response
 {
-    ensureActiveIsolaidTestServer();
+    ensureActiveIsoViewTestServer();
 
     return (new HttpClientFactory())->get('http://127.0.0.1:8010/'.ltrim($route, '/'));
 }
 
-function getIsolaidTestServerProcess(): Process
+function getIsoViewTestServerProcess(): Process
 {
-    static $process = new Symfony\Component\Process\Process(['testbench', 'isolaid:serve', '--no-interaction'], __DIR__.'/../');
+    static $process = new Symfony\Component\Process\Process(['testbench', 'isoview:serve', '--no-interaction'], __DIR__.'/../');
 
     return $process;
 }
 
-function ensureActiveIsolaidTestServer(): Process
+function ensureActiveIsoViewTestServer(): Process
 {
-    $process = getIsolaidTestServerProcess();
+    $process = getIsoViewTestServerProcess();
 
     if ($process->isRunning()) {
         return $process;

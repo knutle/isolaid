@@ -1,6 +1,6 @@
 <?php
 
-namespace Knutle\Isolaid\Http\Controllers;
+namespace Knutle\IsoView\Http\Controllers;
 
 use function collect;
 use Illuminate\Contracts\View\View;
@@ -14,7 +14,7 @@ class RouteListController
 {
     public function index(): View
     {
-        return view('isolaid::index', [
+        return view('isoview::index', [
             'routes' => static::getRoutes(),
         ]);
     }
@@ -26,7 +26,7 @@ class RouteListController
 
     public function default(): View
     {
-        return view('isolaid::default', [
+        return view('isoview::default', [
             'title' => 'Default Preview',
         ]);
     }

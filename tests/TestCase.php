@@ -1,8 +1,8 @@
 <?php
 
-namespace Knutle\Isolaid\Tests;
+namespace Knutle\IsoView\Tests;
 
-use Knutle\Isolaid\IsolaidServiceProvider;
+use Knutle\IsoView\IsoViewServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -10,7 +10,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app): array
     {
         return [
-            IsolaidServiceProvider::class,
+            IsoViewServiceProvider::class,
         ];
     }
 }
