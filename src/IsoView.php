@@ -9,7 +9,7 @@ use Orchestra\Testbench\Concerns\CreatesApplication;
 use Orchestra\Testbench\Concerns\HandlesRoutes;
 use Symfony\Component\Filesystem\Path;
 
-class IsoView
+final class IsoView
 {
     use CreatesApplication;
     use HandlesRoutes;
@@ -27,7 +27,7 @@ class IsoView
 
     public static function bootstrap(): IsoView
     {
-        $instance = (new static());
+        $instance = new IsoView();
 
         $instance->setUpApplicationRoutes();
 
