@@ -53,7 +53,7 @@ function isoviewGetRequest(string $route): Response
 
 function getIsoViewTestServerProcess(): Process
 {
-    static $process = new Symfony\Component\Process\Process(['testbench', 'isoview:serve', '--no-interaction'], __DIR__.'/../');
+    static $process = new Symfony\Component\Process\Process(['./vendor/bin/testbench', 'isoview:serve', '--no-interaction'], __DIR__.'/../');
 
     return $process;
 }

@@ -21,7 +21,7 @@ composer require --dev knutle/isoview
 Then run the install command through the Testbench CLI:
 
 ```bash
-testbench isoview:install
+./vendor/bin/testbench isoview:install
 ```
 
 You should now see a new isoview.php file in ./routes at the root of your package.   
@@ -33,7 +33,7 @@ This is where you will define all your test routes.
 Once you have some routes ready, you can start the server using the Testbench CLI again:
 
 ```bash
-testbench isoview:serve
+./vendor/bin/testbench isoview:serve
 ```
 
 This will serve your pages from [http://127.0.0.1:8010](http://127.0.0.1:8010).  
