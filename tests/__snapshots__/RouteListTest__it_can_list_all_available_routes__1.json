@@ -1,0 +1,12 @@
+{
+    "\/": {
+        "uri": "\/",
+        "name": "index",
+        "description": "Knutle\\Isolaid\\Http\\Controllers\\RouteListController@index"
+    },
+    "default": {
+        "uri": "\/default",
+        "name": "default",
+        "description": "Knutle\\Isolaid\\Http\\Controllers\\RouteListController@default"
+    }
+}

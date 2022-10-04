@@ -1,26 +1,27 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "knutle/isolaid",
+    "description": "Aids your isolated package testing",
     "keywords": [
-        ":vendor_name",
+        "knutle",
         "laravel",
-        ":package_slug"
+        "isolaid"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/knutle/isolaid",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Knut Leborg",
+            "email": "knut@lepa.no",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.1",
-        "spatie/laravel-package-tools": "^1.13.0",
-        "illuminate/contracts": "^9.0"
+        "php": "^8.1"
     },
     "require-dev": {
+        "ext-pcntl": "*",
+        "guzzlehttp/guzzle": "^7.5",
+        "illuminate/contracts": "^9.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0.1",
@@ -31,17 +32,16 @@
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpunit/phpunit": "^9.5",
-        "spatie/laravel-ray": "^1.26"
-    },
-    "autoload": {
-        "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
-        }
+        "spatie/laravel-package-tools": "^1.13.0",
+        "spatie/laravel-ray": "^1.26",
+        "spatie/pest-plugin-snapshots": "^1.1",
+        "symfony/filesystem": "^6.1",
+        "symfony/process": "^6.1"
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Knutle\\Isolaid\\": "src",
+            "Knutle\\Isolaid\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -51,16 +51,9 @@
         "format": "vendor/bin/pint"
     },
     "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
-            ],
-            "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
-            }
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
         }
     },
     "minimum-stability": "dev",
