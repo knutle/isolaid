@@ -1,5 +1,3 @@
-Laravel Framework 9.34.0
-
 Usage:
   command [options] [arguments]
 
@@ -13,9 +11,13 @@ Options:
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Available commands:
-  completion  Dump the shell completion script
-  help        Display help for a command
-  install     Installs package.
-  list        List commands
-  logs        Tails default log file from Laravel stub app.
-  serve       Serve the application on the PHP development server
+  completion      Dump the shell completion script
+  help            Display help for a command
+  install         Installs package.
+  list            List commands
+  logs            Tails default log file from Laravel stub app.
+  serve           Serve the application on the PHP development server
+ route
+  route:list      List all registered routes
+ vendor
+  vendor:publish  Publish any publishable assets from vendor packages

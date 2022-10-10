@@ -8,7 +8,7 @@ it('can run binary', function () {
 
     expect($process->wait())
         ->toBe(0)
-        ->and((string) Str::of($process->getOutput())->after("\n\n"))
+        ->and((string) Str::of($process->getOutput())->after("\n")->ltrim())
         ->toMatchTextSnapshot();
 });
 
@@ -27,5 +27,5 @@ it('binary can pass parameters through to command correctly', function () {
     $process->wait();
 
     expect(trim($process->getOutput()))
-        ->toBeNumeric();
+        ->toEqual('[OK] No locking process found');
 });
