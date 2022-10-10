@@ -6,6 +6,7 @@ use function array_merge;
 use Composer\InstalledVersions;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Console\RouteListCommand;
 use Illuminate\Foundation\Console\VendorPublishCommand;
 use function is_null;
 use Knutle\IsoView\Console\Commands\InstallCommand;
@@ -82,6 +83,7 @@ final class IsoView
             LogsCommand::class,
             InstallCommand::class,
             VendorPublishCommand::class,
+            RouteListCommand::class,
         ];
     }
 
