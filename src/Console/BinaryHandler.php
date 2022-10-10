@@ -6,6 +6,8 @@ use Closure;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernel;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Application;
 use Knutle\IsoView\IsoView;
 use Orchestra\Testbench\Console\Commander;
 use Orchestra\Testbench\Console\Kernel;
@@ -35,6 +37,34 @@ class BinaryHandler extends Commander
         $instance->output = new OutputStyle($instance->input, $output);
 
         return $instance->handle();
+    }
+
+    public function laravel(): Application
+    {
+        if (! $this->app) {
+            $app = parent::laravel();
+
+            $bootstrapAppBackup = $app->bootstrapPath('app.backup.php');
+            $bootstrapAppPath = $app->bootstrapPath('app.php');
+
+            $filesystem = new Filesystem();
+            $filesystem->move($bootstrapAppPath, $bootstrapAppBackup);
+            $filesystem->put($bootstrapAppPath, collect([
+                '<?php',
+                '',
+                'return Knutle\IsoView\IsoView::app();',
+            ])->join("\n"));
+
+            $app->terminating(function () use ($bootstrapAppBackup, $bootstrapAppPath) {
+                $filesystem = new Filesystem();
+
+                if ($filesystem->exists($bootstrapAppBackup)) {
+                    $filesystem->move($bootstrapAppBackup, $bootstrapAppPath);
+                }
+            });
+        }
+
+        return parent::laravel();
     }
 
     public function handle()

@@ -33,12 +33,6 @@ it('can run server and visit all links from index', function (string $route) {
     $internalContent = get($route)->content();
     $externalContent = IsoView::test()->get($route)->body();
 
-    /**
-     * for ext content, working path when trying to symlink is
-     * /Users/knut/Sites/knutle/isoview/vendor/orchestra/testbench-core/laravel/public/vendor
-     * which does not exist
-     * which causes issues
-     */
     assertEquals($internalContent, $externalContent);
 
     assertMatchesHtmlSnapshot(
