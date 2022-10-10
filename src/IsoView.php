@@ -4,6 +4,7 @@ namespace Knutle\IsoView;
 
 use function array_merge;
 use Composer\InstalledVersions;
+use function file_exists;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Console\RouteListCommand;
@@ -71,9 +72,15 @@ final class IsoView
 
     public static function providers(Application $app = null): array
     {
+        $fallback = [];
+
+        if (file_exists($fallbackPath = IsoView::getRootPackagePath('config/isoview.php'))) {
+            $fallback = data_get(include $fallbackPath, 'providers');
+        }
+
         return array_merge([
             IsoViewServiceProvider::class,
-        ], IsoView::config($app)->get('isoview.providers', []));
+        ], IsoView::config($app)->get('isoview.providers', $fallback));
     }
 
     public static function commands(): array
