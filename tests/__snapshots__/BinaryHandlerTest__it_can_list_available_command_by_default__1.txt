@@ -1,0 +1,7 @@
+Available commands:
+  completion  Dump the shell completion script
+  help        Display help for a command
+  install     Installs package.
+  list        List commands
+  logs        Tails default log file from Laravel stub app.
+  serve       Serve the application on the PHP development server

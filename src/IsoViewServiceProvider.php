@@ -2,9 +2,6 @@
 
 namespace Knutle\IsoView;
 
-use Knutle\IsoView\Commands\IsoViewLogsCommand;
-use Knutle\IsoView\Commands\IsoViewServeCommand;
-use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -21,20 +18,7 @@ class IsoViewServiceProvider extends PackageServiceProvider
         $package
             ->name('isoview')
             ->hasConfigFile()
-            ->hasCommand(IsoViewLogsCommand::class)
-            ->hasCommand(IsoViewServeCommand::class)
             ->hasViews()
-            ->hasInstallCommand(
-                fn (InstallCommand $installCommand) => $installCommand->startWith(
-                    function (InstallCommand $installCommand) {
-                        $installCommand->comment('Publishing routes...');
-
-                        $installCommand->callSilently('vendor:publish', [
-                            '--tag' => "{$this->package->shortName()}-routes",
-                        ]);
-                    }
-                )
-            )
             ->hasRoutes('core');
     }
 

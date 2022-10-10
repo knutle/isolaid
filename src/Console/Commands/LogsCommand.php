@@ -1,14 +1,14 @@
 <?php
 
-namespace Knutle\IsoView\Commands;
+namespace Knutle\IsoView\Console\Commands;
 
 use Illuminate\Console\Command;
 use function storage_path;
 use Symfony\Component\Process\Process;
 
-class IsoViewLogsCommand extends Command
+class LogsCommand extends Command
 {
-    protected $signature = 'isoview:logs {--dir : Navigate to logs directory without tailing}';
+    protected $signature = 'logs {--dir : Navigate to logs directory without tailing}';
 
     protected $description = 'Tails default log file from Laravel stub app.';
 

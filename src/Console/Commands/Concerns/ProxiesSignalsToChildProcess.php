@@ -1,6 +1,6 @@
 <?php
 
-namespace Knutle\IsoView\Commands\Concerns;
+namespace Knutle\IsoView\Console\Commands\Concerns;
 
 use const SIGINT;
 use const SIGTERM;

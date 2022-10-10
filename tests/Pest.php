@@ -1,29 +1,25 @@
 <?php
 
 use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Http\Client\Factory as HttpClientFactory;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Knutle\IsoView\IsoView;
 use Knutle\IsoView\Tests\TestCase;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
-uses(TestCase::class)
+uses(TestCase::class)->in(__DIR__);
+
+uses()
     ->beforeAll(function () {
-        IsoView::bootstrap();
-
-        ensureActiveIsoViewTestServer();
+        IsoView::test()->ensureActiveTestServer();
     })
     ->afterAll(function () {
-        $process = getIsoViewTestServerProcess();
+        $process = IsoView::test()->getServerProcess();
 
         if ($process->isRunning()) {
             $process->stop();
         }
     })
-    ->in(__DIR__);
+    ->in(__DIR__.'/Server');
 
 function callArtisanCommand(string $command, array $parameters = []): string
 {
@@ -44,37 +40,56 @@ function callArtisanCommand(string $command, array $parameters = []): string
     return $output;
 }
 
-function isoviewGetRequest(string $route): Response
-{
-    ensureActiveIsoViewTestServer();
+expect()->extend('toMatchSnapshot', function () {
+    test()->assertMatchesSnapshot($this->value);
 
-    return (new HttpClientFactory())->get('http://127.0.0.1:8010/'.ltrim($route, '/'));
-}
+    return $this;
+});
 
-function getIsoViewTestServerProcess(): Process
-{
-    static $process = new Symfony\Component\Process\Process(['./vendor/bin/testbench', 'isoview:serve', '--no-interaction'], __DIR__.'/../');
+expect()->extend('toMatchFileHashSnapshot', function () {
+    test()->assertMatchesFileHashSnapshot($this->value);
 
-    return $process;
-}
+    return $this;
+});
 
-function ensureActiveIsoViewTestServer(): Process
-{
-    $process = getIsoViewTestServerProcess();
+expect()->extend('toMatchFileSnapshot', function () {
+    test()->assertMatchesFileSnapshot($this->value);
 
-    if ($process->isRunning()) {
-        return $process;
-    }
+    return $this;
+});
 
-    $process->start();
+expect()->extend('toMatchHtmlSnapshot', function () {
+    test()->assertMatchesHtmlSnapshot($this->value);
 
-    $ready = $process->waitUntil(
-        fn ($type, $output) => str_contains($output, 'Server running on [http://127.0.0.1:8010]')
-    );
+    return $this;
+});
 
-    if (! $ready) {
-        throw new ProcessFailedException($process);
-    }
+expect()->extend('toMatchJsonSnapshot', function () {
+    test()->assertMatchesJsonSnapshot($this->value);
 
-    return $process;
-}
+    return $this;
+});
+
+expect()->extend('toMatchObjectSnapshot', function () {
+    test()->assertMatchesObjectSnapshot($this->value);
+
+    return $this;
+});
+
+expect()->extend('toMatchTextSnapshot', function () {
+    test()->assertMatchesTextSnapshot($this->value);
+
+    return $this;
+});
+
+expect()->extend('toMatchXmlSnapshot', function () {
+    test()->assertMatchesXmlSnapshot($this->value);
+
+    return $this;
+});
+
+expect()->extend('toMatchYamlSnapshot', function () {
+    test()->assertMatchesYamlSnapshot($this->value);
+
+    return $this;
+});

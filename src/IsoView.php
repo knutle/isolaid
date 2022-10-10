@@ -2,9 +2,16 @@
 
 namespace Knutle\IsoView;
 
+use function array_merge;
 use Composer\InstalledVersions;
 use Illuminate\Config\Repository;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Console\VendorPublishCommand;
+use function is_null;
+use Knutle\IsoView\Console\Commands\InstallCommand;
+use Knutle\IsoView\Console\Commands\LogsCommand;
+use Knutle\IsoView\Console\Commands\ServeCommand;
+use Knutle\IsoView\Testing\IsoViewTestingHelper;
 use Orchestra\Testbench\Concerns\CreatesApplication;
 use Orchestra\Testbench\Concerns\HandlesRoutes;
 use Symfony\Component\Filesystem\Path;
@@ -14,24 +21,31 @@ final class IsoView
     use CreatesApplication;
     use HandlesRoutes;
 
-    public ?Application $app = null;
+    public static ?IsoViewTestingHelper $testHelper = null;
+
+    protected static ?IsoView $instance = null;
+
+    protected ?Application $app = null;
 
     public bool $enablesPackageDiscoveries = true;
 
-    public function __construct()
+    public static function test(): IsoViewTestingHelper
     {
-        if (is_null($this->app)) {
-            $this->refreshApplication();
-        }
+        return IsoView::$testHelper ?? IsoView::$testHelper = new IsoViewTestingHelper();
     }
 
-    public static function bootstrap(): IsoView
+    protected static function instance(): IsoView
     {
-        $instance = new IsoView();
+        return IsoView::$instance ?? IsoView::$instance = new IsoView();
+    }
 
-        $instance->setUpApplicationRoutes();
+    public static function app(): Application
+    {
+        if (is_null(IsoView::instance()->app)) {
+            IsoView::instance()->refreshApplication();
+        }
 
-        return $instance;
+        return IsoView::instance()->app;
     }
 
     protected function refreshApplication(): void
@@ -41,24 +55,41 @@ final class IsoView
 
     protected function getPackageProviders($app): array
     {
-        return [
-            IsoViewServiceProvider::class,
-        ];
+        return $this->providers($app);
     }
 
     protected function defineEnvironment(Application $app): void
     {
-        /** @var Repository $config */
-        $config = $app['config'];
+        $this->config($app)->set('app.debug', true);
+    }
 
-        $config->set('app.debug', true);
+    protected static function config(Application $app = null): Repository
+    {
+        return $app['config'] ?? IsoView::app()['config'];
+    }
+
+    public static function providers(Application $app = null): array
+    {
+        return array_merge([
+            IsoViewServiceProvider::class,
+        ], IsoView::config($app)->get('isoview.providers', []));
+    }
+
+    public static function commands(): array
+    {
+        return [
+            ServeCommand::class,
+            LogsCommand::class,
+            InstallCommand::class,
+            VendorPublishCommand::class,
+        ];
     }
 
     public static function getRootPackagePath(string $path = null): string
     {
         return Path::join(
             InstalledVersions::getRootPackage()['install_path'],
-            $path
+            $path ?? ''
         );
     }
 }

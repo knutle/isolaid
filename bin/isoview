@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+
+use Knutle\IsoView\Console\BinaryHandler;
+
+include_once $_composer_autoload_path ?? __DIR__.'/../vendor/autoload.php';
+
+exit(BinaryHandler::run());

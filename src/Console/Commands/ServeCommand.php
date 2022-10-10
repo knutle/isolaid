@@ -2,16 +2,15 @@
 
 /** @noinspection PhpComposerExtensionStubsInspection */
 
-namespace Knutle\IsoView\Commands;
+namespace Knutle\IsoView\Console\Commands;
 
 use function blank;
 use Closure;
 use Exception;
-use Illuminate\Foundation\Console\ServeCommand;
+use Illuminate\Foundation\Console\ServeCommand as IlluminateServeCommand;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Knutle\IsoView\Commands\Concerns\ProxiesSignalsToChildProcess;
-use Knutle\IsoView\IsoView;
+use Knutle\IsoView\Console\Commands\Concerns\ProxiesSignalsToChildProcess;
 use const PHP_OS;
 use const SIGINT;
 use function str_contains;
@@ -22,18 +21,11 @@ use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use Throwable;
 
-class IsoViewServeCommand extends ServeCommand implements SignalableCommandInterface
+class ServeCommand extends IlluminateServeCommand implements SignalableCommandInterface
 {
     use ProxiesSignalsToChildProcess;
 
-    protected $name = 'isoview:serve';
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->setProcessTitle('isoview:serve');
-    }
+    protected $name = 'serve';
 
     public function handle(): ?int
     {
@@ -41,12 +33,12 @@ class IsoViewServeCommand extends ServeCommand implements SignalableCommandInter
         $this->input->setOption('port', '8010');
         $this->input->setOption('tries', 0);
 
-        IsoView::bootstrap();
-
         try {
             $this->ensureNoLockingProcess();
         } catch (Throwable $throwable) {
-            if (! $this->option('check-lock')) {
+            if ($this->option('check-lock')) {
+                return Command::SUCCESS;
+            } else {
                 $this->error($throwable->getMessage());
             }
 
@@ -148,8 +140,8 @@ class IsoViewServeCommand extends ServeCommand implements SignalableCommandInter
         return array_merge(
             parent::getOptions(),
             [
-                ['check-lock', null, InputOption::VALUE_OPTIONAL, 'Only check for locking process and output only PID if found'],
-                ['fast-exit', null, InputOption::VALUE_OPTIONAL, 'Stop process immediately after successful init'],
+                ['check-lock', null, InputOption::VALUE_NONE, 'Only check for locking process and output only PID if found'],
+                ['fast-exit', null, InputOption::VALUE_NONE, 'Stop process immediately after successful init'],
             ]
         );
     }
